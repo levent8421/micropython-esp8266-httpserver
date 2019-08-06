@@ -143,15 +143,23 @@ class WebServer(object):
 
 
 def index(method, path, headers, body):
-    return '[%s][%s]' % (method, path)
-
+  return '[%s][%s]' % (method, path)
+    
+def led_on(*args):
+  led.status_led.on()
+  
+def led_off(*args):
+  led.status_led.off()
 
 def start():
     wlan = wifi.wlan
     handler = RequestHandler()
     handler.register_handler('GET', '/', index)
+    handler.register_handler('GET', '/led-on', led_on)
+    handler.register_handler('GET', '/led-off', led_off)
     server = WebServer(wlan.ifconfig()[0], wlan)
     server.listen(PORT)
     server.accept(handler)
+
 
 
